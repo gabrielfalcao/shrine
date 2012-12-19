@@ -1,0 +1,11 @@
+Django==1.4.3
+South==0.7.6
+distribute==0.6.31
+dj-database-url==0.2.1
+fuzzywuzzy==0.1
+lettuce==0.2.11
+nose==1.2.1
+sure==1.1.4
+tornado==2.4.1
+unclebob==0.4.0
+wsgiref==0.1.2

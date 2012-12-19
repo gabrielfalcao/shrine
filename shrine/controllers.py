@@ -1,0 +1,88 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import time
+import traceback
+
+from hashlib import sha1
+from shrine import settings
+from django.utils.importlib import import_module
+from django.contrib.auth.models import User
+from tornado.web import RequestHandler
+from shrine.log import logger
+
+
+class SessionRequestHandler(RequestHandler):
+    user_id_cookie_key = 'user_id'
+    _user = None
+
+    def authenticate(self, user, redirect=True):
+        self.session[self.user_id_cookie_key] = user.id
+        self.session.save()
+        if redirect:
+            self.redirect(self.get_argument('next', settings.AUTHENTICATED_HOME))
+
+    def get_error_html(self, status_code, *args, **kw):
+        tb = traceback.format_exc()
+        logger.error(
+            u'caught a %s while on "%s"\n%s\n',
+            str(status_code),
+            tb,
+        )
+        return tb
+
+    def logout(self):
+        self.session.flush()
+        self.clear_all_cookies()
+        return self.redirect(settings.ANONYMOUS_HOME)
+
+    def get_current_user(self):
+        uid = self.session.get(self.user_id_cookie_key)
+
+        if uid:
+            try:
+                return User.objects.get(id=uid)
+            except User.DoesNotExist:
+                pass
+
+    @property
+    def user(self):
+        if not self._user:
+            self._user = self.get_current_user()
+
+        return self._user
+
+    def generate_session_key(self):
+        shahash = sha1()
+        shahash.update(str(time.time()))
+        shahash.update(self.request.remote_ip)
+        return shahash.hexdigest()
+
+    def prepare(self):
+        engine = import_module(settings.SESSION_ENGINE)
+        session_key = self.get_cookie(
+            settings.SESSION_COOKIE_NAME, self.generate_session_key())
+
+        self.session = engine.SessionStore(session_key)
+
+    def get_context(self):
+        user = self.user
+        context = dict(
+            settings=settings,
+            user=user,
+            session=self.session,
+        )
+        return context
+
+    def render(self, __template, **context):
+        context.update(self.get_context())
+        return super(SessionRequestHandler, self).render(__template, **context)
+
+    def get_normalized_params(self):
+        params = self.request.arguments
+        return dict([(k, self.get_argument(k)) for k in params])
+
+    def finish(self, *args, **kw):
+        self.set_cookie(settings.SESSION_COOKIE_NAME,
+                        self.session.session_key)
+
+        super(SessionRequestHandler, self).finish(*args, **kw)
