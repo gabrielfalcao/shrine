@@ -3,7 +3,7 @@
 
 import os
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
+os.environ["DJANGO_SETTINGS_MODULE"] = "shrine.settings"
 
 from django.conf import settings
 

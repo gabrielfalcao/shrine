@@ -91,6 +91,7 @@ class CreateProject(Command):
         static_dirs = [
             SHRINE_FILE('skel/media'),
             SHRINE_FILE('skel/templates'),
+            SHRINE_FILE('skel/controllers'),
         ]
 
         for path in static_dirs:
@@ -109,11 +110,3 @@ class CreateProject(Command):
 
         sh.bold_green_on_black('now execute:\n\n')
         sh.bold_white_on_black('cd {} && shrine run\n'.format(self.project_name))
-
-
-def main():
-    exit_code = Command.run_from_argv(sys.argv[1:])
-    sys.exit(exit_code)
-
-if __name__ == '__main__':
-    main()

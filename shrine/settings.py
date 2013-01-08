@@ -70,26 +70,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    # 'kombu.transport.django',
-    # 'djcelery',
-    'south',
-    'unclebob',
     'lettuce.django',
 )
 BROKER_BACKEND = 'django'
-UNCLEBOB_NO_DATABASE = True
-UNCLEBOB_IGNORED_APPS = [
-    'djcelery',
-    'south',
-]
-UNCLEBOB_EXTRA_NOSE_ARGS = [
-    '--verbosity=2',
-    '--stop',
-]
-
-TEST_RUNNER = 'unclebob.runners.Nose'
-import unclebob
-unclebob.take_care_of_my_tests()
 
 DOMAIN = '127.0.0.1:8000'
 
@@ -150,16 +133,16 @@ for settings_key in dir(user_settings):
     settings_value = getattr(user_settings, settings_key)
     if settings_key == 'DATABASES':
         DATABASES.update(settings_value)
+        setattr(django_settings, 'DATABASES', settings_value)
 
     elif settings_key in ('INSTALLED_APPS', 'ADMINS',):
         INSTALLED_APPS += settings_value
+        setattr(django_settings, settings_key, settings_value)
 
     elif settings_key in ('TEMPLATE_PATH', 'STATIC_PATH',):
+        setattr(django_settings, settings_key, PROJECT_PATH(settings_value))
         setattr(self, settings_key, PROJECT_PATH(settings_value))
 
     else:
+        setattr(django_settings, settings_key, settings_value)
         setattr(self, settings_key, settings_value)
-
-
-sys.path.append(PROJECT_PATH('..'))
-sys.path.append(PROJECT_PATH('.'))

@@ -38,7 +38,8 @@ def make_controller(method, function, pattern):
 def make_responder(method):
     def responder(pattern):
         def dec(func):
-            routes.append(pattern, make_controller(method, func, pattern))
+            routes.append((pattern, make_controller(method, func, pattern)))
+
             return func
         return dec
     return responder

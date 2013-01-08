@@ -4,7 +4,7 @@ import time
 import traceback
 
 from hashlib import sha1
-from shrine import settings
+from shrine.conf import settings
 from django.utils.importlib import import_module
 from django.contrib.auth.models import User
 from tornado.web import RequestHandler
@@ -24,7 +24,7 @@ class SessionRequestHandler(RequestHandler):
     def get_error_html(self, status_code, *args, **kw):
         tb = traceback.format_exc()
         logger.error(
-            u'caught a %s while on "%s"\n%s\n',
+            u'caught a %s while on "%s"\n\n',
             str(status_code),
             tb,
         )

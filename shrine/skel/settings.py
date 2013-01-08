@@ -12,7 +12,6 @@ ADMINS = (
 MANAGERS = ADMINS
 PRODUCT_NAME = '{shrine_name}'
 APP_EMAIL_ADDRESS = 'emailer@{domain}'
-
 DATABASES = {{
     'default': dj_database_url.config(
         default='sqlite://./{shrine_name}.sqlite')}}
