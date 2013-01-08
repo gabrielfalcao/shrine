@@ -3,7 +3,7 @@
 
 import os
 import sys
-os.environ['SHRIME_SETTINGS_MODULE'] = 'settings'
+os.environ['SHRINE_SETTINGS_MODULE'] = 'settings'
 from shrine import settings
 
 from django.core.management import execute_from_command_line

@@ -8,9 +8,9 @@ database_url = dj_database_url
 
 
 try:
-    settings_module = environ['SHRIME_SETTINGS_MODULE']
+    settings_module = environ['SHRINE_SETTINGS_MODULE']
 except KeyError:
-    raise RuntimeError('Shrime requires the environment variable SHRIME_SETTINGS_MODULE to be set to a module path')
+    raise RuntimeError('Shrime requires the environment variable SHRINE_SETTINGS_MODULE to be set to a module path')
 
 user_settings = importlib.import_module(settings_module)
 WORKING_DIR = os.path.abspath(os.path.dirname(user_settings.__file__))

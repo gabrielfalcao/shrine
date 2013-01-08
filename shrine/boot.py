@@ -6,11 +6,11 @@ import sys
 from shrine.loader import Module
 from os.path import join, abspath, dirname
 
-ws_settings_module = os.getenv('SHRIME_SETTINGS_MODULE')
+ws_settings_module = os.getenv('SHRINE_SETTINGS_MODULE')
 if not ws_settings_module:
     raise ImportError(
         'Could not find the module {} inside {}'.format(
-            ws_settings_module or 'SHRIME_SETTINGS_MODULE',
+            ws_settings_module or 'SHRINE_SETTINGS_MODULE',
             os.getcwd()),
     )
 
