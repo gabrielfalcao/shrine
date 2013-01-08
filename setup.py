@@ -13,7 +13,7 @@ def get_packages():
 
     return packages
 
-required_modules = ['tornado', 'django', 'sure', 'lettuce', 'httpretty', 'virtualenvwrapper', 'requests', 'dj_database_url']
+required_modules = ['tornado', 'django', 'sure', 'lettuce', 'httpretty', 'virtualenvwrapper', 'requests', 'dj_database_url', 'envoy']
 
 setup(
     name='shrine',
