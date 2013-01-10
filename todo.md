@@ -50,3 +50,20 @@ def process_user(controller, name):
     controller.db.persist(User, name=name).to(persist_user)
 
 ```
+
+## Add controllers as python files under `./controllers/`
+
+They will be found automatically
+
+Example `controllers/friends.py`
+
+
+```python
+from shrine import get
+from django.contrib.auth.models import User
+
+@get('/profile')
+def render_my_profile(controller):
+    with controller.db.query(User, username=controller.session['username']) as me:
+        controller.render('admin/profile.html', dict(me=me))
+```

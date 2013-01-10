@@ -1,0 +1,19 @@
+Django==1.4.3
+South==0.7.6
+couleur==0.4.1
+distribute==0.6.31
+dj-database-url==0.2.1
+envoy==0.0.2
+fuzzywuzzy==0.1
+ipdb==0.7
+ipython==0.13.1
+lettuce==0.2.11
+misaka==1.0.2
+nose==1.2.1
+requests==1.1.0
+-e git+git@github.com:gabrielfalcao/shrine.git@82fe48b00dd7ad8f315429ca2494737a7b630dd5#egg=shrine-dev
+steadymark==0.4.3
+sure==1.1.4
+tornado==2.4.1
+unclebob==0.4.0
+wsgiref==0.1.2
