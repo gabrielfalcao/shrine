@@ -220,7 +220,6 @@ class CreateProject(Command):
         self.prepare_for_heroku()
         sh.bold_green_on_black('now execute:\n\n')
         sh.bold_white_on_black('  cd {}\n'.format(self.project_name))
-        sh.bold_white_on_black('  shrine syncdb\n')
         sh.bold_white_on_black('  shrine run\n')
 
     def create_git_repository(self):
