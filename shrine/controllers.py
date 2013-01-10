@@ -13,25 +13,34 @@ from shrine.log import logger
 
 class PrettyErrorRequestHandler(RequestHandler):
     def write_error(self, status_code, **kwargs):
-        import traceback
-        if self.settings.get("debug") and "exc_info" in kwargs:
+        self.set_header('Content-Type', 'text/html')
+        if not settings.DEBUG:
+            self.finish("""<h1>Server Error</h1>""")
+
+        if "exc_info" in kwargs:
             exc_info = kwargs["exc_info"]
             trace_info = ''.join(["%s<br/>" % line for line in traceback.format_exception(*exc_info)])
-            request_info = ''.join(["<strong>%s</strong>: %s<br/>" % (k, self.request.__dict__[k] ) for k in self.request.__dict__.keys()])
+            request_info = ''.join(["<strong>%s</strong>: <code>%s</code> <br /> <hr />" % (k, self.request.__dict__[k]) for k in self.request.__dict__.keys()])
             error = exc_info[1]
-
-            self.set_header('Content-Type', 'text/html')
-            self.finish("""<html>
+            self.finish('''<html>
+                            <head>
                              <title>%s</title>
+                             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                             </head>
                              <body>
+                                <style type="text/css">
+                                * {font-family: Helvetica, Arial, sans-serif;}
+                                code {font-family: Monaco, monospace; width: 100%%; max-height: 300px;overflow:auto; }
+                                code.block {background-color: #EEE; border: 2px solid #444; overflow:scroll;display:block;}
+                                </style>
                                 <h2>Error</h2>
                                 <p>%s</p>
                                 <h2>Traceback</h2>
-                                <p>%s</p>
+                                <code class="block">%s</code>
                                 <h2>Request Info</h2>
                                 <p>%s</p>
                              </body>
-                           </html>""" % (error, error,
+                           </html>''' % (error, error,
                                         trace_info, request_info))
 
 
