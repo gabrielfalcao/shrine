@@ -13,6 +13,8 @@ def make_application(**config):
     configuration = {
         'template_path': settings.LOCAL_FILE(settings.TEMPLATE_PATH),
     }
+    configuration.update(settings.TORNADO_CONFIG)
     configuration.update(config)
+
     routes.append((r"/media/(.*)", StaticFileHandler, {"path": static_path}))
     return Application(routes, **configuration)

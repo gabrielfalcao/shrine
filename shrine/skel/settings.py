@@ -31,6 +31,10 @@ DOMAIN = "{domain}"
 AUTHENTICATED_HOME = "/admin"
 ENV_NAME = "localhost"
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+TORNADO_CONFIG = {
+    'login_url': '/login',
+    'cookie_secret': "{salt}",
+}
 
 
 if PRODUCTION:

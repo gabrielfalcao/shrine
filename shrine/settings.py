@@ -97,3 +97,4 @@ MAILGUN_ACCESS_KEY = "some-invalid-key"
 MAILGUN_SERVER_NAME = "some-invalid-server-name"
 
 EMAIL_FILE_PATH = PROJECT_PATH(".messages")
+TORNADO_CONFIG = {}
