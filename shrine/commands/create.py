@@ -170,7 +170,7 @@ class CreateProject(Command):
 
         self.project_name = unicode(args.pop(0)).strip()
         self.project_path = join(self.pwd, self.project_name)
-        self.shrine_tmp_dir = '.{}_tmp'.format(self.project_name)
+        self.shrine_tmp_dir = '{}_temp'.format(self.project_name)
 
         if os.path.exists(self.project_name):
             sh.bold_red_on_black("{} already exists\n".format(self.project_name))
@@ -200,7 +200,10 @@ class CreateProject(Command):
         templates.extend(glob(SHRINE_FILE('skel/*.py')))
 
         os.makedirs(self.project_name)
-        os.makedirs(join(self.project_name, self.shrine_tmp_dir))
+
+        tmp_dir_path = join(self.project_name, self.shrine_tmp_dir)
+        os.makedirs(tmp_dir_path)
+
         for template in templates:
             name = basename(template)
             self.create_file(name)
