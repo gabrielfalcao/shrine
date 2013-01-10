@@ -16,10 +16,13 @@ class RunProject(Command):
 
     current_dir_name = basename(os.getcwdu())
 
-    def run(self, args):
-
+    def get_settings(self):
         os.environ['SHRINE_SETTINGS_MODULE'] = '{}.settings'.format(basename(os.getcwdu()))
         from shrine.conf import settings
+        return settings
+
+    def run(self, args):
+        settings = self.get_settings()
 
         for name in map(basename, glob(join('controllers', '*.py'))):
             autoreload.watch(name)
@@ -47,3 +50,15 @@ class RunProject(Command):
 
     def remove_extension(self, name):
         return splitext(name)[0]
+
+
+class RunInProduction(RunProject):
+    shell = 'run:production'
+
+    def run(self, args):
+        settings = self.get_settings()
+        if not settings.DEBUG:
+            return super(RunInProduction, self).run(args)
+
+        print "Cannot run in production because settings.DEBUG is True"
+        raise SystemExit(1)
