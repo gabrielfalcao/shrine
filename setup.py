@@ -16,20 +16,15 @@ def get_packages():
 required_modules = [
     'tornado',
     'django',
-    'sure',
-    'lettuce',
-    'httpretty',
-    'virtualenvwrapper',
     'requests',
     'dj_database_url',
     'envoy',
-    'south',
     'couleur',
 ]
 
 setup(
     name='shrine',
-    version='0.0.1',
+    version='0.0.2',
     description='Tornado + Django',
     author=u'Gabriel Falcao',
     author_email='gabriel@nacaolivre.org',
