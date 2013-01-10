@@ -8,7 +8,7 @@ import hashlib
 from functools import wraps
 from glob import glob
 from os.path import join, basename, exists
-
+from shrine import version as shrine_version
 from shrine.shell import sh, ballot, checkmark, arrow, SHRINE_FILE, logo
 
 from .registry import Command
@@ -109,6 +109,7 @@ class CreateProject(Command):
             'domain': domain,
             'salt': sha512.hexdigest(),
             'shrine_tmp_dir': self.shrine_tmp_dir,
+            'shrine_version': shrine_version,
         }
 
         return context
