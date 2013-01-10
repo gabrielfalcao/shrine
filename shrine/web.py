@@ -30,19 +30,29 @@ class Controller(SessionRequestHandler):
         return self.do_patch(self, *args, **kw)
 
 
-def make_controller(method, function, pattern):
+def make_controller(method, function, pattern, bases):
     name = function.__name__.title() + method.title()
-    return type(name, (Controller,), {'do_{}'.format(method.lower()): function})
+    parents = (Controller, ) + tuple(bases)
+    name = 'do_{}'.format(method.lower())
+    return type(name, parents, {name: function})
 
 
-def make_responder(method):
-    def responder(pattern):
+def make_responder(method, bases1=()):
+    def responder(pattern, bases2=()):
         def dec(func):
-            routes.append((pattern, make_controller(method, func, pattern)))
+            bases = tuple(bases1) + tuple(bases2)
+            ctrl = make_controller(method, func, pattern, bases)
+            routes.append((pattern, ctrl))
 
             return func
         return dec
     return responder
 
-for method in 'get', 'post', 'put', 'delete', 'head', 'options', 'patch':
-    setattr(self, method, make_responder(method))
+
+def mount_responder_factory(obj, bases=()):
+    for method in 'get', 'post', 'put', 'delete', 'head', 'options', 'patch':
+        setattr(obj, method, make_responder(method, bases))
+
+    return obj
+
+mount_responder_factory(self)
