@@ -4,11 +4,14 @@ import os
 import logging
 from glob import glob
 from os.path import join, basename, splitext
+from couleur import Shell
 from .registry import Command
 
 from tornado.ioloop import IOLoop
 from shrine.loader import Module
 from tornado import autoreload
+
+sh = Shell()
 
 
 class RunProject(Command):
@@ -42,7 +45,10 @@ class RunProject(Command):
         from shrine.log import logger
         logger.setLevel(logging.WARNING)
 
-        IOLoop.instance().start()
+        try:
+            IOLoop.instance().start()
+        except KeyboardInterrupt:
+            sh.bold_red_on_black("\rInterrupted by the User (Control-C)\n")
 
     def get_controller_import_path(self, name):
         return '{}.controllers.{}'.format(self.current_dir_name,
