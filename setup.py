@@ -24,7 +24,7 @@ required_modules = [
 
 setup(
     name='shrine',
-    version='0.0.3',
+    version='0.0.4',
     description='Tornado + Django',
     author=u'Gabriel Falcao',
     author_email='gabriel@nacaolivre.org',
