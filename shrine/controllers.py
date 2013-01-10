@@ -47,6 +47,7 @@ class PrettyErrorRequestHandler(RequestHandler):
 class SessionRequestHandler(PrettyErrorRequestHandler):
     user_id_cookie_key = 'user_id'
     _user = None
+    session = None
 
     def authenticate(self, user, redirect=True):
         self.session[self.user_id_cookie_key] = user.id
