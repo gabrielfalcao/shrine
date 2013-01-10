@@ -35,6 +35,6 @@ setup(
         'console_scripts': ['shrine = shrine.bin:main'],
     },
     package_data={
-        'shrine': ['skel/*/*/*'],
+        'shrine': ['skel/*/*/*.*', 'skel/*/*.*', 'skel/*.*'],
     },
 )
