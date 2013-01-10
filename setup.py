@@ -3,6 +3,7 @@
 
 import os
 from setuptools import setup
+import shrine
 
 
 def get_packages():
@@ -24,7 +25,7 @@ required_modules = [
 
 setup(
     name='shrine',
-    version='0.0.8',
+    version=shrine.version,
     description='Tornado + Django',
     author=u'Gabriel Falcao',
     author_email='gabriel@nacaolivre.org',
@@ -35,6 +36,12 @@ setup(
         'console_scripts': ['shrine = shrine.bin:main'],
     },
     package_data={
-        'shrine': ['skel/*/*/*.*', 'skel/*/*.*', 'skel/*.*', 'skel/Procfile', 'skel/.gitignore'],
+        'shrine': [
+            'skel/*/*/*.*',
+            'skel/*/*.*',
+            'skel/*.*',
+            'skel/Procfile',
+            'skel/.gitignore',
+        ],
     },
 )
