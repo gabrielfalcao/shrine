@@ -2,7 +2,7 @@
 import os
 from shrine.init import dj_database_url
 
-DEBUG = os.environ.get("PORT", None) is not None
+DEBUG = not os.getenv("PORT")
 TEMPLATE_DEBUG = DEBUG
 PRODUCTION = not DEBUG
 
