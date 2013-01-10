@@ -3,11 +3,12 @@
 import os
 import logging
 from glob import glob
-from .registry import Command, join, basename, splitext
+from os.path import join, basename, splitext
+from .registry import Command
 
 from tornado.ioloop import IOLoop
-from tornado.web import Application
 from shrine.loader import Module
+from tornado import autoreload
 
 
 class RunProject(Command):
@@ -21,6 +22,7 @@ class RunProject(Command):
         from shrine.conf import settings
 
         for name in map(basename, glob(join('controllers', '*.py'))):
+            autoreload.watch(name)
             Module.load(self.get_controller_import_path(name))
 
         from shrine.routes import make_application

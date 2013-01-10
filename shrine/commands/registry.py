@@ -1,29 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
-import envoy
-import shutil
 import optparse
 
 from glob import glob
-from os.path import dirname, join, abspath, realpath, basename, splitext
+from os.path import basename, splitext
 from shrine.loader import Module
-from couleur import Shell
+from shrine.shell import SHRINE_FILE
+
 COMMANDS = []
-SHRINE_FILE = lambda *path: abspath(join(dirname(realpath(__file__)), '..', *path))
-ballot = ' \xe2\x9c\x98\n'
-checkmark = ' \xe2\x9c\x94\n'
-arrow = ' \xe2\x9e\x99'
-
-
-logo = """
-         dP                oo
-         88
-.d8888b. 88d888b. 88d888b. dP 88d888b. .d8888b.
-Y8ooooo. 88'  `88 88'  `88 88 88'  `88 88ooood8
-      88 88    88 88       88 88    88 88.  ...
-`88888P' dP    dP dP       dP dP    dP `88888P'
-"""
 
 
 class MetaCommand(type):

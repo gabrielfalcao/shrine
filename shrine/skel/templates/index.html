@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>@shrine_title@</title>
+    <title>@shrine_name@</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="" />
     <meta name="author" content="" />
@@ -15,7 +15,33 @@
   </head>
 
   <body>
-    <h1>Hello World</h1>
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">@domain@</a>
+          {% block nav_bar_content %}
+          {% end %}
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      {% block content %}
+      <h1>Welcome to @shrine_name@</h1>
+      <h3>Please contact me at @email@</h3>
+      {% end %}
+      <hr>
+
+      <footer>
+        <p>&copy; @domain@ 2013</p>
+      </footer>
+
+    </div>
 
     <script src="/media/js/jquery.js"></script>
     <script src="/media/js/bootstrap-transition.js"></script>

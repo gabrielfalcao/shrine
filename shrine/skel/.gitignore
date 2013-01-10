@@ -1,0 +1,6 @@
+*.pyc
+build
+dist
+*.egg-info
+{shrine_tmp_dir}/*
+{shrine_tmp_dir}/.*
