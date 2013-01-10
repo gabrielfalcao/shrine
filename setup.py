@@ -24,7 +24,7 @@ required_modules = [
 
 setup(
     name='shrine',
-    version='0.0.2',
+    version='0.0.3',
     description='Tornado + Django',
     author=u'Gabriel Falcao',
     author_email='gabriel@nacaolivre.org',
@@ -35,6 +35,6 @@ setup(
         'console_scripts': ['shrine = shrine.bin:main'],
     },
     package_data={
-        'shrine': ['COPYING', '*.md'],
+        'shrine': ['skel/*/*/*'],
     },
 )
