@@ -30,8 +30,8 @@ DOMAIN = "{domain}"
 
 AUTHENTICATED_HOME = "/admin"
 ENV_NAME = "localhost"
-SESSION_ENGINE = "django.contrib.sessions.backends.file"
-SESSION_FILE_PATH = "{shrine_tmp_dir}"
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+
 
 if PRODUCTION:
     EMAIL_BACKEND = "shrine.mailgun.EmailBackend"
