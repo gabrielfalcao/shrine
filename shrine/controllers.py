@@ -115,7 +115,8 @@ class SessionRequestHandler(PrettyErrorRequestHandler):
         return dict([(k, self.get_argument(k)) for k in params])
 
     def finish(self, *args, **kw):
-        self.set_cookie(settings.SESSION_COOKIE_NAME,
-                        self.session.session_key)
+        if self.session:
+            self.set_cookie(settings.SESSION_COOKIE_NAME,
+                            self.session.session_key)
 
         super(SessionRequestHandler, self).finish(*args, **kw)
