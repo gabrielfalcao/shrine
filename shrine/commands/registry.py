@@ -4,12 +4,11 @@ import os
 import envoy
 import shutil
 import optparse
+
 from glob import glob
 from os.path import dirname, join, abspath, realpath, basename, splitext
 from shrine.loader import Module
-
 from couleur import Shell
-
 COMMANDS = []
 SHRINE_FILE = lambda *path: abspath(join(dirname(realpath(__file__)), '..', *path))
 ballot = ' \xe2\x9c\x98\n'
@@ -29,7 +28,7 @@ Y8ooooo. 88'  `88 88'  `88 88 88'  `88 88ooood8
 
 class MetaCommand(type):
     def __init__(cls, name, bases, attrs):
-        if name not in ('MetaCommand', 'Command'):
+        if name not in ('MetaCommand', 'Command', 'ShellCommand'):
             shell = getattr(cls, 'shell', None)
             if not shell:
                 raise SyntaxError('Commands have to define a "shell" attribute')
@@ -46,8 +45,7 @@ class Command(object):
     def run_from_argv(cls, argv):
         for name in map(basename, glob(SHRINE_FILE('commands', '*.py'))):
             if name not in ('__init__.py', basename(__file__)):
-                path = 'shrine.commands.{} *'.format(splitext(name)[0])
-                Module.load(path)
+                Module.load('shrine.commands.{}'.format(splitext(name)[0]))
 
         Command, args = cls.parse_argv(argv)
         return Command().run(args)
@@ -82,3 +80,12 @@ class Command(object):
             raise RuntimeError("Could not find a command for `{}`.\nOptions include:\n{}".format(name, "\n".join(menu)))
 
         return last_command
+
+
+class ShellCommand(Command):
+    def run(self, args):
+        os.environ['SHRINE_SETTINGS_MODULE'] = '{}.settings'.format(basename(os.getcwdu()))
+
+        from shrine.conf import settings
+        os.system('python {} {} {}'.format(
+            settings.LOCAL_FILE('manage.py'), self.shell, ' '.format(args)))

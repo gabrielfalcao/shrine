@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import os
+import re
+import hashlib
 
 from .registry import *
-
 
 
 class CreateProject(Command):
@@ -26,14 +28,19 @@ class CreateProject(Command):
         username = os.environ.get('USER', 'user')
         domain = '{}.io'.format(self.project_name)
 
-        fallback_email = '{username}@{domain}.io'.format(**locals())
+        fallback_email = '{username}@{domain}'.format(**locals())
         email = os.environ.get('EMAIL', fallback_email)
+        sha512 = hashlib.sha512()
+        sha512.update(self.project_name)
+        sha512.update(username)
+        sha512.update(domain)
 
         context = {
             'shrine_name': self.project_name,
             'username': username,
             'email': email,
             'domain': domain,
+            'salt': sha512.hexdigest(),
         }
 
         with self.new_file(name) as destination:
@@ -73,7 +80,28 @@ class CreateProject(Command):
     def run(self, args):
         sh = Shell(indent=0)
 
-        self.project_name = args.pop(0)
+        if not args:
+            sh.bold_white_on_black("USAGE: ")
+            sh.bold_green_on_black("shrine create name_of_the_project\n")
+            raise SystemExit(1)
+
+        self.project_name = unicode(args.pop(0)).strip()
+        if os.path.exists(self.project_name):
+            sh.bold_red_on_black("{} already exists\n".format(self.project_name))
+            print
+            raise SystemExit(1)
+
+        if not re.search(r'^[a-zA-Z][\w_]+$', self.project_name):
+            example = re.sub(r'^[\W0-9]+', '', self.project_name)
+            example = ''.join(re.findall(r'^[a-zA-Z]\w+', example)) or 'project_name'
+
+            sh.bold_red_on_black("Invalid shrine name: {}\n".format(self.project_name))
+            sh.bold_white_on_black("Please use a valid python package name\n")
+            sh.bold_white_on_black("Example: ")
+            sh.bold_green_on_black(example)
+            print
+            raise SystemExit(1)
+
         print sh.bold_yellow_on_black("Creating `{}`...".format(self.project_name))
 
         templates = [
@@ -109,4 +137,6 @@ class CreateProject(Command):
                 sh.bold_red(ballot)
 
         sh.bold_green_on_black('now execute:\n\n')
-        sh.bold_white_on_black('cd {} && shrine run\n'.format(self.project_name))
+        sh.bold_white_on_black('  cd {}\n'.format(self.project_name))
+        sh.bold_white_on_black('  shrine syncdb\n')
+        sh.bold_white_on_black('  shrine run\n')

@@ -3,8 +3,10 @@
 
 import os
 import sys
-os.environ['SHRINE_SETTINGS_MODULE'] = 'settings'
-from shrine import settings
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__))))
+os.environ['SHRINE_SETTINGS_MODULE'] = '{shrine_name}.settings'
+from shrine.conf import settings
 
 from django.core.management import execute_from_command_line
 

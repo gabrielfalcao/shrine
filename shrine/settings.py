@@ -1,25 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import time
-import hashlib
-import sys
-
 import os
 from os import environ as ENV
-from shrine.conf import settings as django_settings
-from shrine.fs import WORKING_DIR, user_settings
 
-self = sys.modules[__name__]
-
-for settings_key in dir(django_settings):
-    if settings_key.startswith('__'):
-        continue
-
-    settings_value = getattr(django_settings, settings_key)
-    setattr(self, settings_key, settings_value)
-
-
-sha512 = hashlib.sha512()
+from shrine.fs import WORKING_DIR
 
 PROJECT_PATH = lambda *path: os.path.join(WORKING_DIR, *path)
 
@@ -33,8 +17,6 @@ MANAGERS = ADMINS
 
 PORT = int(ENV.get('PORT', 8000))
 PRODUCTION = False
-
-APP_EMAIL_ADDRESS = 'e@shrine.io'
 
 DATABASES = {
 }
@@ -62,19 +44,14 @@ USE_TZ = True
 ROOT_URLCONF = 'shrine.routes'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'routes.wsgi'
+WSGI_APPLICATION = 'shrine.routes.wsgi'
 
 TEMPLATE_PATH = PROJECT_PATH('templates')
 
 INSTALLED_APPS = (
-    'django.contrib.sessions',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'lettuce.django',
+    'shrine.apps.core',
 )
 BROKER_BACKEND = 'django'
-
-DOMAIN = '127.0.0.1:8000'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -120,29 +97,3 @@ MAILGUN_ACCESS_KEY = 'some-invalid-key'
 MAILGUN_SERVER_NAME = 'some-invalid-server-name'
 
 EMAIL_FILE_PATH = PROJECT_PATH('.messages')
-MAKE_FULL_URL = lambda x: 'http://{0}/{1}'.format(DOMAIN, x.lstrip('/'))
-sha512.update(str(time.time()))
-
-COOKIE_SECRET = sha512.hexdigest()
-
-ENV_NAME = 'localhost'
-
-for settings_key in dir(user_settings):
-    if settings_key.startswith('__'):
-        continue
-    settings_value = getattr(user_settings, settings_key)
-    if settings_key == 'DATABASES':
-        DATABASES.update(settings_value)
-        setattr(django_settings, 'DATABASES', settings_value)
-
-    elif settings_key in ('INSTALLED_APPS', 'ADMINS',):
-        INSTALLED_APPS += settings_value
-        setattr(django_settings, settings_key, settings_value)
-
-    elif settings_key in ('TEMPLATE_PATH', 'STATIC_PATH',):
-        setattr(django_settings, settings_key, PROJECT_PATH(settings_value))
-        setattr(self, settings_key, PROJECT_PATH(settings_value))
-
-    else:
-        setattr(django_settings, settings_key, settings_value)
-        setattr(self, settings_key, settings_value)
