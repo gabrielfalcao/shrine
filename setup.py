@@ -24,7 +24,7 @@ required_modules = [
 
 setup(
     name='shrine',
-    version='0.0.4',
+    version='0.0.5',
     description='Tornado + Django',
     author=u'Gabriel Falcao',
     author_email='gabriel@nacaolivre.org',
@@ -35,6 +35,6 @@ setup(
         'console_scripts': ['shrine = shrine.bin:main'],
     },
     package_data={
-        'shrine': ['skel/*/*/*.*', 'skel/*/*.*', 'skel/*.*'],
+        'shrine': ['skel/*/*/*.*', 'skel/*/*.*', 'skel/*.*', 'skel/Procfile'],
     },
 )
