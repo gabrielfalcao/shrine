@@ -46,6 +46,7 @@ class RunProject(Command):
         logger.setLevel(logging.WARNING)
 
         try:
+            autoreload.start()
             IOLoop.instance().start()
         except KeyboardInterrupt:
             sh.bold_red_on_black("\rInterrupted by the User (Control-C)\n")
