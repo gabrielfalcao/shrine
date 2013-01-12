@@ -33,8 +33,8 @@ class Controller(SessionRequestHandler):
 def make_controller(method, function, pattern, bases):
     name = function.__name__.title() + method.title()
     parents = (Controller, ) + tuple(bases)
-    name = 'do_{}'.format(method.lower())
-    return type(name, parents, {name: function})
+    function_name = 'do_{}'.format(method.lower())
+    return type(name, parents, {function_name: function})
 
 
 def make_responder(method, bases1=()):
