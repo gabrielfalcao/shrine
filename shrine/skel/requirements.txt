@@ -2,3 +2,4 @@ Django==1.4.3
 shrine=={shrine_version}
 tornado==2.4.1
 psycopg2
+south==0.7.6
