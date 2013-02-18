@@ -29,7 +29,7 @@ for settings_key in dir(shrine_settings):
     if settings_key.startswith('__'):
         continue
     settings_value = getattr(shrine_settings, settings_key)
-    if settings_key in ('DATABASES', 'TORNADO_CONFIG'):
+    if settings_key == 'DATABASES':
         django_settings.DATABASES.update(settings_value)
 
     elif settings_key in ('INSTALLED_APPS',):
