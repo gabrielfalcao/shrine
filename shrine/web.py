@@ -31,8 +31,21 @@ class Controller(SessionRequestHandler):
 
 
 def make_controller(method, function, pattern, bases):
+    # `r_` stands for "registered"
+    BaseController = Controller
+    pops = []
+    for index, item in enumerate(routes):
+        r_pattern, r_ctrl = item
+
+        if r_pattern == pattern:
+            BaseController = r_ctrl
+
+            pops.append(item)
+
+    map(routes.remove, pops)  # removing duplicate routes
+
     name = function.__name__.title() + method.title()
-    parents = (Controller, ) + tuple(bases)
+    parents = (BaseController, ) + tuple(bases)
     function_name = 'do_{}'.format(method.lower())
     return type(name, parents, {function_name: function})
 
