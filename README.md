@@ -1,5 +1,5 @@
 # Shrine
-0.0.11
+0.0.12
 Tornado + Django
 
 Leverages Heroku deployment + mailgun support and asynchronous query
