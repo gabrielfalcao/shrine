@@ -9,25 +9,25 @@ self = sys.modules[__name__]
 
 class Controller(SessionRequestHandler):
     def get(self, *args, **kw):
-        return self.do_get(self, *args, **kw)
+        return self.do_get(*args, **kw)
 
     def post(self, *args, **kw):
-        return self.do_post(self, *args, **kw)
+        return self.do_post(*args, **kw)
 
     def put(self, *args, **kw):
-        return self.do_put(self, *args, **kw)
+        return self.do_put(*args, **kw)
 
     def delete(self, *args, **kw):
-        return self.do_delete(self, *args, **kw)
+        return self.do_delete(*args, **kw)
 
     def options(self, *args, **kw):
-        return self.do_options(self, *args, **kw)
+        return self.do_options(*args, **kw)
 
     def head(self, *args, **kw):
-        return self.do_head(self, *args, **kw)
+        return self.do_head(*args, **kw)
 
     def patch(self, *args, **kw):
-        return self.do_patch(self, *args, **kw)
+        return self.do_patch(*args, **kw)
 
 
 def make_controller(method, function, pattern, bases):

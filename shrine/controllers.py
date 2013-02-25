@@ -8,7 +8,10 @@ from shrine.conf import settings
 from django.utils.importlib import import_module
 from django.contrib.auth.models import User
 from tornado.web import RequestHandler
+from tornado import template
 from shrine.log import logger
+from shrine.views import widget
+from shrine.engine import ControllerLoader
 
 
 class PrettyErrorRequestHandler(RequestHandler):
@@ -104,12 +107,16 @@ class SessionRequestHandler(PrettyErrorRequestHandler):
             settings=settings,
             user=user,
             session=self.session,
+            widget=widget.collection(),
         )
         return context
 
-    def render(self, __template, **context):
-        context.update(self.get_context())
-        return super(SessionRequestHandler, self).render(__template, **context)
+    def render(self, name, **context):
+        ControllerLoader(settings.WORKING_DIR).seek_and_destroy()
+        ctx = context.copy()
+        ctx.update(self.get_context())
+        loader = template.Loader(settings.TEMPLATE_PATH)
+        self.write(loader.load(name).generate(**ctx))
 
     def get_normalized_params(self):
         params = self.request.arguments

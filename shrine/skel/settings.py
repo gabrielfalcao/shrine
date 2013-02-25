@@ -28,7 +28,9 @@ INSTALLED_APPS = (
 )
 DOMAIN = "{domain}"
 
-AUTHENTICATED_HOME = "/admin"
+AUTHENTICATED_HOME = "/"
+ANONYMOUS_HOME = "/"
+
 ENV_NAME = "localhost"
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 TORNADO_CONFIG = {{
