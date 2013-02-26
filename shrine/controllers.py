@@ -67,10 +67,11 @@ class SessionRequestHandler(PrettyErrorRequestHandler):
         )
         return tb
 
-    def logout(self):
+    def logout(self, redirect=True):
         self.session.flush()
         self.clear_all_cookies()
-        return self.redirect(settings.ANONYMOUS_HOME)
+        if redirect:
+            self.redirect(settings.ANONYMOUS_HOME)
 
     def get_current_user(self):
         uid = self.session.get(self.user_id_cookie_key)
