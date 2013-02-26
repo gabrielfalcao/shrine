@@ -98,3 +98,4 @@ MAILGUN_SERVER_NAME = "some-invalid-server-name"
 
 EMAIL_FILE_PATH = PROJECT_PATH(".messages")
 TORNADO_CONFIG = {}
+FORCE_TRACEBACK = False

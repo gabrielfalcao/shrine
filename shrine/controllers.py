@@ -17,7 +17,7 @@ from shrine.engine import ControllerLoader
 class PrettyErrorRequestHandler(RequestHandler):
     def write_error(self, status_code, **kwargs):
         self.set_header('Content-Type', 'text/html')
-        if not settings.DEBUG:
+        if not settings.DEBUG and not settings.FORCE_TRACEBACK:
             self.finish("""<h1>Server Error</h1>""")
 
         if "exc_info" in kwargs:
