@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
+from hashlib import sha256
 from os import environ as ENV
 
 from shrine.init import WORKING_DIR
@@ -20,6 +21,8 @@ PRODUCTION = False
 
 DATABASES = {
 }
+
+SECRET_KEY = sha256(os.getenv('USER')).hexdigest()
 
 TIME_ZONE = "America/New_York"
 
