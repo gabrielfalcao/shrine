@@ -22,7 +22,7 @@ PRODUCTION = False
 DATABASES = {
 }
 
-SECRET_KEY = sha256(os.getenv('USER')).hexdigest()
+SECRET_KEY = sha256(os.getenv('PATH')).hexdigest()
 
 TIME_ZONE = "America/New_York"
 
