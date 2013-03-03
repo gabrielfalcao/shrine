@@ -5,13 +5,16 @@ import traceback
 
 from hashlib import sha1
 from shrine.conf import settings
-from django.utils.importlib import import_module
-from django.contrib.auth.models import User
+
+from django.contrib.auth import get_user_model
 from tornado.web import RequestHandler
 from tornado import template
 from shrine.log import logger
 from shrine.views import widget
 from shrine.engine import ControllerLoader
+
+
+User = get_user_model()
 
 
 class PrettyErrorRequestHandler(RequestHandler):
@@ -52,12 +55,15 @@ class SessionRequestHandler(PrettyErrorRequestHandler):
     _user = None
     session = None
     requires_authentication = False
+    session_key = None
 
     def authenticate(self, user, redirect=True):
         self.session[self.user_id_cookie_key] = user.id
+        self.session.modified = True
         self.session.save()
+
         if redirect:
-            self.redirect(self.get_argument('next', settings.AUTHENTICATED_HOME))
+            return self.redirect(self.get_argument('next', settings.AUTHENTICATED_HOME))
 
     def get_error_html(self, status_code, *args, **kw):
         tb = traceback.format_exc()
@@ -74,34 +80,28 @@ class SessionRequestHandler(PrettyErrorRequestHandler):
         if redirect:
             self.redirect(settings.ANONYMOUS_HOME)
 
-    def get_current_user(self):
+    @property
+    def user_id(self):
         uid = self.session.get(self.user_id_cookie_key)
-
-        if uid:
-            try:
-                return User.objects.get(id=uid)
-            except User.DoesNotExist:
-                pass
+        return int(uid or 0)
 
     @property
     def user(self):
-        if not self._user:
-            self._user = self.get_current_user()
+        if self.user_id:
+            try:
+                usr = User.objects.get(id=self.user_id)
+                return usr
+            except User.DoesNotExist:
+                return
 
-        return self._user
+        return
 
     def generate_session_key(self):
         shahash = sha1()
         shahash.update(str(time.time()))
         shahash.update(self.request.remote_ip)
-        return shahash.hexdigest()
-
-    def prepare(self):
-        engine = import_module(settings.SESSION_ENGINE)
-        session_key = self.get_cookie(
-            settings.SESSION_COOKIE_NAME, self.generate_session_key())
-
-        self.session = engine.SessionStore(session_key)
+        h = shahash.hexdigest()
+        return h
 
     def get_context(self):
         user = self.user
@@ -125,8 +125,8 @@ class SessionRequestHandler(PrettyErrorRequestHandler):
         return dict([(k, self.get_argument(k)) for k in params])
 
     def finish(self, *args, **kw):
-        if self.session:
-            self.set_cookie(settings.SESSION_COOKIE_NAME,
-                            self.session.session_key)
+        if self.session_key:
+            self.set_secure_cookie(settings.SESSION_COOKIE_NAME,
+                                   self.session_key)
 
-        super(SessionRequestHandler, self).finish(*args, **kw)
+        return super(SessionRequestHandler, self).finish(*args, **kw)

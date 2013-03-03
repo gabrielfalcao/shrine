@@ -22,6 +22,8 @@ PRODUCTION = False
 DATABASES = {
 }
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
 SECRET_KEY = sha256(os.getenv('PATH')).hexdigest()
 
 TIME_ZONE = "America/New_York"

@@ -1,5 +1,6 @@
-Django==1.4.3
+Django==1.5
 shrine=={shrine_version}
 tornado==2.4.1
 psycopg2
 south==0.7.6
+requests=1.1.0
