@@ -51,7 +51,11 @@ class Controller(SessionRequestHandler):
 
         self.session = engine.SessionStore(session_key=session_key)
         self.session_key = session_key or self.generate_session_key()
-        self.session.save()
+        try:
+            self.session.save()
+        except Exception:
+            # TODO check this marreta
+            pass
 
     def perform(self, method, args, kwargs):
         self.action = self.Actor(self)

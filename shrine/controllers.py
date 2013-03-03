@@ -76,6 +76,7 @@ class SessionRequestHandler(PrettyErrorRequestHandler):
 
     def logout(self, redirect=True):
         self.session.flush()
+        self.session.save()
         self.clear_all_cookies()
         if redirect:
             self.redirect(settings.ANONYMOUS_HOME)
