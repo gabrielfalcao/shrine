@@ -20,7 +20,7 @@ if not ws_settings_module:
 from django.conf import settings as django_settings
 
 SUBDIR = join(os.getcwdu(), '..')
-sys.path.insert(0, SUBDIR)
+sys.path.append(SUBDIR)
 shrine_settings = Module.load(ws_settings_module)
 sys.path.remove(SUBDIR)
 

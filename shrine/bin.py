@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
-from shrine.commands.registry import Command
+from shrine.cmds.registry import Command
 
 
 def main():

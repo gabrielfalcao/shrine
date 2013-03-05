@@ -28,9 +28,9 @@ class Command(object):
 
     @classmethod
     def run_from_argv(cls, argv):
-        for name in map(basename, glob(SHRINE_FILE('commands', '*.py'))):
+        for name in map(basename, glob(SHRINE_FILE('cmds', '*.py'))):
             if name not in ('__init__.py', basename(__file__)):
-                Module.load('shrine.commands.{}'.format(splitext(name)[0]))
+                Module.load('shrine.cmds.{}'.format(splitext(name)[0]))
 
         Command, args = cls.parse_argv(argv)
         return Command().run(args)
@@ -57,7 +57,7 @@ class Command(object):
             menu.append(k)
             if name == k:
                 if last_command:
-                    raise RuntimeError("Can't have two commands with the same `shell` declaration as name: {}.{} and {}.{}")
+                    raise RuntimeError("Can't have two cmds with the same `shell` declaration as name: {}.{} and {}.{}")
 
                 last_command = Command
 

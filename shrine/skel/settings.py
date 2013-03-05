@@ -18,6 +18,11 @@ DATABASES = {{
     "default": dj_database_url.config(
         default="sqlite://./{shrine_name}.sqlite")}}
 
+if PRODUCTION:
+    DATABASES['default']['OPTIONS'] = {
+        'autocommit': True,
+    }
+
 TEMPLATE_PATH = "./templates"
 STATIC_PATH = "./media"
 
