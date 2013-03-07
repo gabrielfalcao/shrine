@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
+import sys
+import couleur
 import optparse
 
 from glob import glob
@@ -25,6 +27,10 @@ class MetaCommand(type):
 
 class Command(object):
     __metaclass__ = MetaCommand
+
+    def __init__(self, output=None):
+        self.output = output or sys.stderr
+        self.log = couleur.Shell(self.output)
 
     @classmethod
     def run_from_argv(cls, argv):

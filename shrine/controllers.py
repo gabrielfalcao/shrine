@@ -6,15 +6,12 @@ import traceback
 from hashlib import sha1
 from shrine.conf import settings
 
-from django.contrib.auth import get_user_model
 from tornado.web import RequestHandler
 from tornado import template
 from shrine.log import logger
 from shrine.views import widget
 from shrine.engine import ControllerLoader
-
-
-User = get_user_model()
+from shrine.models import User
 
 
 class PrettyErrorRequestHandler(RequestHandler):
@@ -56,6 +53,13 @@ class SessionRequestHandler(PrettyErrorRequestHandler):
     session = None
     requires_authentication = False
     session_key = None
+
+    def prepare(self):
+        self.action = self.Actor(self)
+        self.requires_authentication = any([
+            self.requires_authentication,
+            self.action.requires_authentication
+        ])
 
     def authenticate(self, user, redirect=True):
         self.session[self.user_id_cookie_key] = user.id

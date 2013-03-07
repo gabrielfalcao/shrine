@@ -4,14 +4,11 @@ import os
 import logging
 from glob import glob
 from os.path import join, basename, splitext
-from couleur import Shell
 from .registry import Command
 
 from tornado.ioloop import IOLoop
 from shrine.loader import Module
 from tornado import autoreload
-
-sh = Shell()
 
 
 class RunProject(Command):
@@ -33,14 +30,14 @@ class RunProject(Command):
 
         from shrine.routes import make_application
 
-        MESSAGE = "{} running at http://localhost:{}".format(
+        MESSAGE = "{} running at http://localhost:{}\n".format(
             settings.PRODUCT_NAME,
             settings.PORT,
         )
 
         application = make_application()
         application.listen(settings.PORT)
-        print MESSAGE
+        self.log.bold_green(MESSAGE)
 
         from shrine.log import logger
         logger.setLevel(logging.WARNING)
@@ -49,7 +46,7 @@ class RunProject(Command):
             autoreload.start()
             IOLoop.instance().start()
         except KeyboardInterrupt:
-            sh.bold_red_on_black("\rInterrupted by the User (Control-C)\n")
+            self.log.bold_red_on_black("\rInterrupted by the User (Control-C)\n")
 
     def get_controller_import_path(self, name):
         return '{}.controllers.{}'.format(self.current_dir_name,
@@ -67,5 +64,5 @@ class RunInProduction(RunProject):
         if not settings.DEBUG:
             return super(RunInProduction, self).run(args)
 
-        print "Cannot run in production because settings.DEBUG is True"
+        self.log.bold_red("Cannot run in production because settings.DEBUG is True")
         raise SystemExit(1)

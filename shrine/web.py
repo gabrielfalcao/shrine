@@ -58,13 +58,12 @@ class Controller(SessionRequestHandler):
             pass
 
     def perform(self, method, args, kwargs):
-        self.action = self.Actor(self)
         self.get_or_create_session()
         if self.requires_authentication and not self.user:
             return self.action.handle_anonymous(method, *args, **kwargs)
 
         responder = getattr(self, 'do_{0}'.format(method))
-        sh.bold_white("{method_color}[{method}] {path}\n".format(
+        sh.bold_white("{method_color}[{method}] {path}\033[0m\n".format(
             method=method.upper(),
             method_color=method_color(method),
             path=self.request.path)
