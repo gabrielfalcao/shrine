@@ -11,6 +11,10 @@ class ORM(object):
             appname = app.__name__.split('.')[0]
             setattr(self, appname, app)
 
+        for Model in models.get_models():
+            setattr(self, Model.__name__, Model)
+
+
 orm = ORM()
 
 User = get_user_model()

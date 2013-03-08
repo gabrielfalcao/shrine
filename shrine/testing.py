@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import os
 import sys
 import time
 import socket
 
 from functools import wraps
-from tempfile import NamedTemporaryFile
+
 from multiprocessing import Process
 from shrine.cmds.run import RunProject
 from urlparse import urljoin
@@ -69,17 +70,18 @@ def runserver(host='localhost', port=9000, logfile=None):
 def tornado_server(port=9000, host='localhost', wait=0.5):
     def decorator(func):
         logfile = 'shrine.test.log'
-        p = Process(target=runserver, kwargs={'port': int(port), 'host': host, 'logfile': logfile})
-        server = ShrineTestServer(p, logfile=logfile, host=host, port=port)
 
         @wraps(func)
         def wrapper(*args, **kw):
+            p = Process(target=runserver, kwargs={'port': int(port), 'host': host, 'logfile': logfile})
+            server = ShrineTestServer(p, logfile=logfile, host=host, port=port)
+
             p.start()
             wait_server(host, port, wait)
             try:
                 retval = func(server, *args, **kw)
             finally:
-                p.terminate()
+                os.kill(p.pid, 9)
 
             return retval
 
