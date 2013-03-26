@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 import logging
+
 from glob import glob
 from os.path import join, basename, splitext
 from .registry import Command

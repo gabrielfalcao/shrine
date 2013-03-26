@@ -3,4 +3,4 @@ shrine=={shrine_version}
 tornado==2.4.1
 psycopg2
 south==0.7.6
-requests=1.1.0
+requests==1.1.0
