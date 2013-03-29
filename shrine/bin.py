@@ -22,5 +22,10 @@ def execute():
 
     sys.exit(exit_code)
 
+
+def main():
+    return check and execute()
+
+
 if __name__ == '__main__':
-    check and execute()
+    main()
